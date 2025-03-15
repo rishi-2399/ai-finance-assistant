@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Personal Finance Assistant</title>
+</head>
+<body>
+    <h2>Track Your Expenses</h2>
+    <input type="text" id="category" placeholder="Category">
+    <input type="number" id="amount" placeholder="Amount">
+    <button onclick="addExpense()">Add Expense</button>
+
+    <h2>Ask AI Finance Assistant</h2>
+    <input type="text" id="query" placeholder="Ask about saving tips...">
+    <button onclick="askAI()">Ask AI</button>
+    <p id="aiResponse"></p>
+
+    <script>
+        async function addExpense() {
+            const category = document.getElementById('category').value;
+            const amount = document.getElementById('amount').value;
+            await fetch('/add_expense/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: 1, category, amount })
+            });
+            alert('Expense Added');
+        }
+
+        async function askAI() {
+            const query = document.getElementById('query').value;
+            const response = await fetch('/chatbot/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            });
+            const data = await response.json();
+            document.getElementById('aiResponse').innerText = data.response;
+        }
+    </script>
+</body>
+</html>
